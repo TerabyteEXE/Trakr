@@ -6,20 +6,7 @@
     <title>DG Tracker | Keep On Trak!</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
-    <style>
-        :root { --bg: #f2f2f0; --card: #ffffff; --text: #000000; --accent: #2d5a27; --border: #000000; }
-        [data-theme='dark'] { --bg: #111111; --card: #1a1a1a; --text: #ffffff; --accent: #4ade80; --border: #ffffff; }
-
-        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; transition: none; }
-        .blocky-card { background: var(--card); border: 3px solid var(--border); border-radius: 0px; box-shadow: 6px 6px 0px var(--border); }
-        .btn-solid { background: var(--text); color: var(--bg); border: 2px solid var(--text); font-weight: 900; text-transform: uppercase; letter-spacing: 0.1em; transition: all 0.1s; }
-        .btn-solid:active { transform: translate(2px, 2px); box-shadow: none; }
-        .btn-outline { background: transparent; color: var(--text); border: 2px solid var(--text); font-weight: 900; text-transform: uppercase; }
-        .view-step { display: none; }
-        .view-step.active { display: block; }
-        input { background: transparent; border-bottom: 2px solid var(--border); outline: none; }
-        .ledger-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 4px; }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-4 md:p-10">
 
@@ -115,7 +102,7 @@
         }
         function renderSetup() {
             const list = document.getElementById('player-setup-list');
-            list.innerHTML = state.players.map((p, i) => `<div class="flex justify-between items-center border-b border-[var(--border)] py-2"><span class="font-bold font-mono">${p.name}</span><button onclick="state.players.splice(${i},1); renderSetup(); save();" class="text-xs opacity-40 font-bold uppercase">Remove</button></div>`).join('');
+            list.innerHTML = state.players.map((p, i) => `<div class="flex justify-between items-center border-b border-[var(--border)] py-2"><span class="font-bold font-mono">${p.name}</span><bu[...]  
         }
         function startRound() { if (state.players.length === 0) return; state.isLive = true; showView('game-view'); selectPlayer(0); save(); }
         function selectPlayer(idx) {
@@ -128,7 +115,7 @@
             tempScore = tempPar; document.getElementById('target-name').innerText = p.name;
             document.getElementById('stroke-count').innerText = tempScore; renderGame();
         }
-        function adjPar(v) { tempPar = Math.max(1, tempPar + v); document.getElementById('par-val').innerText = tempPar; tempScore = tempPar; document.getElementById('stroke-count').innerText = tempScore; }
+        function adjPar(v) { tempPar = Math.max(1, tempPar + v); document.getElementById('par-val').innerText = tempPar; tempScore = tempPar; document.getElementById('stroke-count').innerText = t[...]  
         function adjScore(v) { tempScore = Math.max(1, tempScore + v); document.getElementById('stroke-count').innerText = tempScore; }
         function logScore() {
             if (state.activeIdx === null) return;
@@ -140,13 +127,13 @@
         }
         function renderGame() {
             const chips = document.getElementById('player-selector');
-            chips.innerHTML = state.players.map((p, i) => `<button onclick="selectPlayer(${i})" class="btn-outline px-4 py-2 text-xs ${state.activeIdx === i ? 'bg-[var(--text)] text-[var(--bg)]' : ''}">${p.name}</button>`).join('');
+            chips.innerHTML = state.players.map((p, i) => `<button onclick="selectPlayer(${i})" class="btn-outline px-4 py-2 text-xs ${state.activeIdx === i ? 'bg-[var(--text)] text-[var(--bg)]' [...]  
             const ledger = document.getElementById('ledger-content');
             ledger.innerHTML = state.players.map((p, pIdx) => {
                 let total = p.scores.reduce((a, b) => a + b, 0);
                 let parTotal = p.scores.reduce((acc, _, i) => acc + (state.pars[i] || 0), 0);
                 let rel = total - parTotal;
-                return `<div class="space-y-4"><div class="flex justify-between items-baseline border-b-2 border-[var(--border)]"><h4 class="text-2xl font-black">${p.name}</h4><span class="text-4xl font-mono font-black ${rel <= 0 ? 'text-[var(--accent)]' : 'text-red-500'}">${rel > 0 ? '+' : ''}${rel === 0 ? 'E' : rel}</span></div><div class="ledger-grid">${state.pars.map((par, i) => `<div onclick="editHole(${pIdx}, ${i})" class="border border-[var(--border)] p-1 text-center ${!p.scores[i] ? 'opacity-10' : ''}"><div class="text-[7px] font-mono opacity-50">H${i+1}</div><div class="text-[8px] font-mono opacity-30">P${par}</div><div class="font-bold text-sm">${p.scores[i] || '-'}</div></div>`).join('')}</div></div>`;
+                return `<div class="space-y-4"><div class="flex justify-between items-baseline border-b-2 border-[var(--border)]"><h4 class="text-2xl font-black">${p.name}</h4><span class="text-4[...]  
             }).join('');
         }
         function finishRound() { state.isFinished = true; showView('summary-view'); renderSummary(); save(); }
@@ -163,13 +150,11 @@
             const sniper = [...stats].sort((a,b) => b.birdies - a.birdies)[0];
             const anchor = [...stats].sort((a,b) => b.pars - a.pars)[0];
             document.getElementById('awards-grid').innerHTML = `
-                <div class="border-2 border-[var(--border)] p-4"><p class="text-[10px] uppercase font-bold opacity-40">Top Gun</p><p class="text-2xl font-black">${winner.name}</p><p class="text-xs opacity-60">Score: ${winner.rel <= 0 ? winner.rel : '+'+winner.rel}</p></div>
-                <div class="border-2 border-[var(--border)] p-4"><p class="text-[10px] uppercase font-bold opacity-40">The Sniper</p><p class="text-2xl font-black">${sniper.name}</p><p class="text-xs opacity-60">${sniper.birdies} Birdies</p></div>
-                <div class="border-2 border-[var(--border)] p-4"><p class="text-[10px] uppercase font-bold opacity-40">The Anchor</p><p class="text-2xl font-black">${anchor.name}</p><p class="text-xs opacity-60">${anchor.pars} Clean Pars</p></div>
+                <div class="border-2 border-[var(--border)] p-4"><p class="text-[10px] uppercase font-bold opacity-40">Top Gun</p><p class="text-2xl font-black">${winner.name}</p><p class="text-x[...]  
             `;
-            document.getElementById('final-standings').innerHTML = stats.sort((a,b) => a.rel - b.rel).map((s, i) => `<div class="flex justify-between font-mono text-sm py-1 border-b border-[var(--border)] opacity-60"><span>${i+1}. ${s.name}</span><span>${s.rel <= 0 ? s.rel : '+'+s.rel} (${s.total})</span></div>`).join('');
+            document.getElementById('final-standings').innerHTML = stats.sort((a,b) => a.rel - b.rel).map((s, i) => `<div class="flex justify-between font-mono text-sm py-1 border-b border-[var(-[...]");
         }
-        function editHole(pIdx, hIdx) { const val = prompt("Correct Strokes:", state.players[pIdx].scores[hIdx]); if (val && !isNaN(val)) { state.players[pIdx].scores[hIdx] = parseInt(val); save(); renderGame(); } }
+        function editHole(pIdx, hIdx) { const val = prompt("Correct Strokes:", state.players[pIdx].scores[hIdx]); if (val && !isNaN(val)) { state.players[pIdx].scores[hIdx] = parseInt(val); save([...]
         function toggleTheme() { state.theme = state.theme === 'light' ? 'dark' : 'light'; init(); save(); }
         function resetApp() { if(confirm("ARCHIVE LEDGER?")) { localStorage.clear(); location.reload(); } }
         init();
