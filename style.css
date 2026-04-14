@@ -1,1 +1,81 @@
+/* CSS Variables - Light Theme */
+:root {
+    --bg: #f2f2f0;
+    --card: #ffffff;
+    --text: #000000;
+    --accent: #2d5a27;
+    --border: #000000;
+}
 
+/* CSS Variables - Dark Theme */
+[data-theme='dark'] {
+    --bg: #111111;
+    --card: #1a1a1a;
+    --text: #ffffff;
+    --accent: #4ade80;
+    --border: #ffffff;
+}
+
+/* Body Styling */
+body {
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    transition: none;
+}
+
+/* Blocky Card Component */
+.blocky-card {
+    background: var(--card);
+    border: 3px solid var(--border);
+    border-radius: 0px;
+    box-shadow: 6px 6px 0px var(--border);
+}
+
+/* Solid Button Styling */
+.btn-solid {
+    background: var(--text);
+    color: var(--bg);
+    border: 2px solid var(--text);
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: all 0.1s;
+}
+
+.btn-solid:active {
+    transform: translate(2px, 2px);
+    box-shadow: none;
+}
+
+/* Outline Button Styling */
+.btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 2px solid var(--text);
+    font-weight: 900;
+    text-transform: uppercase;
+}
+
+/* View Step Navigation */
+.view-step {
+    display: none;
+}
+
+.view-step.active {
+    display: block;
+}
+
+/* Input Fields */
+input {
+    background: transparent;
+    border-bottom: 2px solid var(--border);
+    outline: none;
+}
+
+/* Ledger Grid Layout */
+.ledger-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
+    gap: 4px;
+}
