@@ -2,42 +2,173 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <title>DG Tracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DG Tracker | Keep On Trak!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-gray-100 flex flex-col min-h-screen">
-    <header class="bg-blue-600 p-4 text-white text-center">
-        <h1 class="text-2xl font-bold">DG Tracker Game Interface</h1>
+<body class="p-4 md:p-10">
+
+    <header class="max-w-6xl mx-auto mb-12 flex justify-between items-start border-b-4 border-[var(--border)] pb-6">
+        <div>
+            <h1 class="text-4xl font-black tracking-tighter leading-none">DG_Trakr</h1>
+            <p class="font-mono text-[10px] uppercase mt-2 tracking-[0.3em] opacity-50">Disc Golf Tracking Made Easy!!</p>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="toggleTheme()" class="btn-outline px-3 py-1 text-xs">Mode</button>
+            <button onclick="resetApp()" class="btn-solid bg-red-600 border-red-600 px-3 py-1 text-xs text-white">Reset</button>
+        </div>
     </header>
 
-    <main class="flex-1 p-4">
-        <section id="setup-view" class="hidden">
-            <h2 class="text-xl mb-2">Setup View</h2>
-            <form id="setup-form" class="bg-white p-4 rounded shadow">
-                <label class="block mb-2">
-                    Game Name:
-                    <input type="text" id="game-name" class="mt-1 block w-full p-2 border border-gray-300 rounded">
-                </label>
-                <button type="submit" class="mt-4 bg-green-500 text-white p-2 rounded">Start Game</button>
-            </form>
+    <main class="max-w-6xl mx-auto">
+        <section id="setup-view" class="view-step active">
+            <div class="max-w-md mx-auto space-y-8">
+                <div class="blocky-card p-6">
+                    <h2 class="text-xs font-bold uppercase tracking-widest mb-6 opacity-40">Registration</h2>
+                    <div id="player-setup-list" class="space-y-3 mb-6"></div>
+                    <div class="flex gap-2">
+                        <input id="new-name" type="text" placeholder="PLAYER NAME" class="flex-1 font-bold p-2">
+                        <button onclick="addPlayer()" class="btn-solid px-6 py-2">Add</button>
+                    </div>
+                </div>
+                <button onclick="startRound()" class="btn-solid w-full py-6 text-xl shadow-[8px_8px_0px_#2d5a27]">Initialize Round</button>
+            </div>
         </section>
 
-        <section id="game-view" class="hidden">
-            <h2 class="text-xl mb-2">Game View</h2>
-            <div id="game-info" class="bg-white p-4 rounded shadow"></div>
-            <button id="end-game" class="mt-4 bg-red-500 text-white p-2 rounded">End Game</button>
+        <section id="game-view" class="view-step">
+            <div class="grid lg:grid-cols-[400px_1fr] gap-10">
+                <div class="space-y-6">
+                    <div class="blocky-card p-6">
+                        <div id="player-selector" class="flex flex-wrap gap-2 mb-6"></div>
+                        <div id="par-prompter" class="mb-6 bg-[var(--text)] text-[var(--bg)] p-4 hidden">
+                            <p class="text-[10px] font-bold uppercase mb-2 text-center">Set Par for Hole <span id="current-h-num">1</span></p>
+                            <div class="flex items-center justify-around">
+                                <button onclick="adjPar(-1)" class="text-3xl font-black"> [−] </button>
+                                <span id="par-val" class="text-4xl font-black">3</span>
+                                <button onclick="adjPar(1)" class="text-3xl font-black"> [+] </button>
+                            </div>
+                        </div>
+                        <div id="scorer-ui" class="text-center py-10 border-2 border-[var(--border)] mb-6">
+                            <p id="target-name" class="text-xl font-black uppercase mb-1">Select Player</p>
+                            <div class="flex items-center justify-center gap-10">
+                                <button onclick="adjScore(-1)" class="text-4xl font-black"> [−] </button>
+                                <span id="stroke-count" class="text-8xl font-black font-mono">3</span>
+                                <button onclick="adjScore(1)" class="text-4xl font-black"> [+] </button>
+                            </div>
+                        </div>
+                        <button onclick="logScore()" class="btn-solid w-full py-4 text-lg">Commit to Tracker</button>
+                        <button onclick="finishRound()" class="w-full mt-4 text-[10px] font-bold uppercase tracking-widest opacity-30 hover:opacity-100 transition">Seal Tracker & Finish</button>
+                    </div>
+                </div>
+                <div class="blocky-card p-6 overflow-x-auto">
+                    <h3 class="text-[10px] font-bold uppercase tracking-widest opacity-40 mb-6">Master Tracker</h3>
+                    <div id="ledger-content" class="space-y-10"></div>
+                </div>
+            </div>
         </section>
 
-        <section id="summary-view" class="hidden">
-            <h2 class="text-xl mb-2">Summary View</h2>
-            <div id="summary-info" class="bg-white p-4 rounded shadow"></div>
-            <button id="restart-game" class="mt-4 bg-blue-500 text-white p-2 rounded">Restart Game</button>
+        <section id="summary-view" class="view-step">
+            <div class="max-w-2xl mx-auto blocky-card p-10 space-y-8 bg-[var(--card)]">
+                <div class="text-center border-b-4 border-[var(--border)] pb-6">
+                    <h2 class="text-5xl font-black tracking-tighter uppercase">Closing Statement</h2>
+                    <p id="final-date" class="font-mono text-xs opacity-50 mt-2 uppercase"></p>
+                </div>
+                <div id="awards-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                <div id="final-standings" class="space-y-2"></div>
+                <button onclick="resetApp()" class="btn-solid w-full py-4">Archive & Start New</button>
+            </div>
         </section>
     </main>
 
-    <footer class="bg-blue-600 p-4 text-white text-center">
-        &copy; 2026 DG Tracker. All Rights Reserved.
-    </footer>
+    <script>
+        let state = JSON.parse(localStorage.getItem('dg_ledger')) || { players: [], pars: [], activeIdx: null, isLive: false, isFinished: false, theme: 'light' };
+        let tempScore = 3; let tempPar = 3;
+
+        function init() {
+            document.documentElement.setAttribute('data-theme', state.theme);
+            if (state.isFinished) { showView('summary-view'); renderSummary(); }
+            else if (state.isLive) { showView('game-view'); renderGame(); selectPlayer(state.activeIdx || 0); }
+            else { renderSetup(); }
+        }
+
+        function showView(id) { document.querySelectorAll('.view-step').forEach(v => v.classList.remove('active')); document.getElementById(id).classList.add('active'); }
+        function save() { localStorage.setItem('dg_ledger', JSON.stringify(state)); }
+        function addPlayer() {
+            const input = document.getElementById('new-name');
+            if (!input.value.trim()) return;
+            state.players.push({ name: input.value.trim().toUpperCase(), scores: [] });
+            input.value = ''; renderSetup(); save();
+        }
+        function renderSetup() {
+            const list = document.getElementById('player-setup-list');
+            list.innerHTML = state.players.map((p, i) => `<div class="flex justify-between items-center border-b border-[var(--border)] py-2"><span class="font-bold font-mono">${p.name}</span><button onclick="removePlayer(${i})" class="text-red-600 text-xs font-bold">Remove</button></div>`).join('');
+        }
+        function removePlayer(i) { state.players.splice(i, 1); renderSetup(); save(); }
+        function startRound() { if (state.players.length === 0) return; state.isLive = true; showView('game-view'); selectPlayer(0); save(); }
+        function selectPlayer(idx) {
+            state.activeIdx = idx; const p = state.players[idx]; const hIdx = p.scores.length;
+            if (state.pars[hIdx] === undefined) {
+                document.getElementById('par-prompter').classList.remove('hidden');
+                document.getElementById('current-h-num').innerText = hIdx + 1;
+                tempPar = 3; document.getElementById('par-val').innerText = tempPar;
+            } else { document.getElementById('par-prompter').classList.add('hidden'); tempPar = state.pars[hIdx]; }
+            tempScore = tempPar; document.getElementById('target-name').innerText = p.name;
+            document.getElementById('stroke-count').innerText = tempScore; renderGame();
+        }
+        function adjPar(v) { tempPar = Math.max(1, tempPar + v); document.getElementById('par-val').innerText = tempPar; tempScore = tempPar; document.getElementById('stroke-count').innerText = tempPar; }
+        function adjScore(v) { tempScore = Math.max(1, tempScore + v); document.getElementById('stroke-count').innerText = tempScore; }
+        function logScore() {
+            if (state.activeIdx === null) return;
+            const p = state.players[state.activeIdx];
+            if (state.pars[p.scores.length] === undefined) state.pars[p.scores.length] = tempPar;
+            p.scores.push(tempScore);
+            let nextIdx = (state.activeIdx + 1) % state.players.length;
+            save(); selectPlayer(nextIdx);
+        }
+        function renderGame() {
+            const chips = document.getElementById('player-selector');
+            chips.innerHTML = state.players.map((p, i) => `<button onclick="selectPlayer(${i})" class="btn-outline px-4 py-2 text-xs ${state.activeIdx === i ? 'bg-[var(--text)] text-[var(--bg)]' : ''}">${p.name}</button>`).join('');
+            const ledger = document.getElementById('ledger-content');
+            ledger.innerHTML = state.players.map((p, pIdx) => {
+                let total = p.scores.reduce((a, b) => a + b, 0);
+                let parTotal = p.scores.reduce((acc, _, i) => acc + (state.pars[i] || 0), 0);
+                let rel = total - parTotal;
+                return `<div class="space-y-4"><div class="flex justify-between items-baseline border-b-2 border-[var(--border)]"><h4 class="text-2xl font-black">${p.name}</h4><span class="text-4xl font-mono font-black">${rel > 0 ? '+' : ''}${rel}</span></div><div class="grid grid-cols-9 gap-1">${p.scores.map((s, i) => `<div class="text-center"><p class="text-[10px] opacity-50 font-mono">H${i+1}</p><button onclick="editHole(${pIdx}, ${i})" class="btn-outline w-full py-1 text-sm font-bold">${s}</button></div>`).join('')}</div></div>`;
+            }).join('');
+        }
+        function finishRound() { state.isFinished = true; showView('summary-view'); renderSummary(); save(); }
+        function renderSummary() {
+            document.getElementById('final-date').innerText = new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+            const stats = state.players.map(p => {
+                const total = p.scores.reduce((a, b) => a + b, 0);
+                const parTotal = p.scores.reduce((acc, _, i) => acc + (state.pars[i] || 0), 0);
+                const birdies = p.scores.filter((s, i) => s < state.pars[i]).length;
+                const pars = p.scores.filter((s, i) => s === state.pars[i]).length;
+                return { name: p.name, rel: total - parTotal, total, birdies, pars };
+            });
+            const winner = [...stats].sort((a,b) => a.rel - b.rel)[0];
+            const sniper = [...stats].sort((a,b) => b.birdies - a.birdies)[0];
+            const anchor = [...stats].sort((a,b) => b.pars - a.pars)[0];
+            document.getElementById('awards-grid').innerHTML = `
+                <div class="border-2 border-[var(--border)] p-4"><p class="text-[10px] uppercase font-bold opacity-40">Top Gun</p><p class="text-2xl font-black">${winner.name}</p><p class="text-xs opacity-70">Relative: ${winner.rel > 0 ? '+' : ''}${winner.rel}</p></div>
+                <div class="border-2 border-[var(--border)] p-4"><p class="text-[10px] uppercase font-bold opacity-40">Best Birdie Hunter</p><p class="text-2xl font-black">${sniper.name}</p><p class="text-xs opacity-70">Birdies: ${sniper.birdies}</p></div>
+            `;
+            document.getElementById('final-standings').innerHTML = stats.sort((a,b) => a.rel - b.rel).map((s, i) => `<div class="flex justify-between font-mono text-sm py-1 border-b border-[var(--border)]"><span class="font-bold">${i + 1}. ${s.name}</span><span>${s.rel > 0 ? '+' : ''}${s.rel} (${s.total})</span></div>`).join('');
+        }
+        function editHole(pIdx, hIdx) { const val = prompt("Correct Strokes:", state.players[pIdx].scores[hIdx]); if (val && !isNaN(val)) { state.players[pIdx].scores[hIdx] = parseInt(val); save(); renderGame(); } }
+        function toggleTheme() { state.theme = state.theme === 'light' ? 'dark' : 'light'; init(); save(); }
+        function resetApp() { if(confirm("ARCHIVE LEDGER?")) { localStorage.clear(); location.reload(); } }
+        init();
+    </script>
+    <footer class="max-w-6xl mx-auto mt-20 mb-8 border-t-4 border-[var(--border)] pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="text-[10px] font-mono uppercase tracking-widest opacity-50">
+        © 2026 Terabyte_EXE — No Rights Reserved.
+    </div>
+    <div class="flex gap-4 items-center">
+        <span class="text-[9px] font-black uppercase bg-[var(--text)] text-[var(--bg)] px-2 py-0.5">v1.0.0-stable</span>
+        <p class="text-[10px] font-mono uppercase opacity-50">Designed by Logan York</p>
+    </div>
+</footer>
 </body>
 </html>
