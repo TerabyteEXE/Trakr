@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terabyte_EXE | App Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #f2f2f0; --text: #000000; --border: #000000; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+        .blocky-card { 
+            background: white; 
+            border: 4px solid var(--border); 
+            box-shadow: 8px 8px 0px var(--border);
+            transition: transform 0.1s, box-shadow 0.1s;
+        }
+        .blocky-card:hover { 
+            transform: translate(-2px, -2px); 
+            box-shadow: 10px 10px 0px var(--border); 
+        }
+        .btn-link {
+            background: var(--text);
+            color: var(--bg);
+            padding: 10px 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 800;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="p-8 md:p-20">
+
+    <header class="max-w-4xl mx-auto mb-16 border-b-8 border-black pb-8">
+        <h1 class="text-6xl font-black tracking-tighter italic">TERABYTE_EXE</h1>
+        <p class="font-mono uppercase tracking-[0.5em] opacity-60 mt-4">Utility Software Archive // v2026</p>
+    </header>
+
+    <main class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12">
+        
+        <div class="blocky-card p-8 flex flex-col justify-between">
+            <div>
+                <span class="text-[10px] font-mono bg-black text-white px-2 py-1 uppercase">Stable</span>
+                <h2 class="text-3xl font-black mt-4 mb-2">DG_Trakr</h2>
+                <p class="text-sm opacity-70 mb-6">High-performance disc golf score tracking with local storage ledger.</p>
+            </div>
+            <a href="dg-trakr/index.html" class="btn-link text-center">Launch App</a>
+        </div>
+
+        <div class="blocky-card p-8 border-dashed opacity-50 flex items-center justify-center">
+            <p class="font-mono text-sm uppercase">[ Slot Available ]</p>
+        </div>
+
+    </main>
+
+    <footer class="max-w-4xl mx-auto mt-20 font-mono text-[10px] uppercase opacity-40">
+        System Status: All Nodes Operational
+    </footer>
+
+</body>
+</html>
