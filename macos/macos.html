@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mac OS 8 Simulator</title>
+    <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+    
+    <style>
+        /* --- SYSTEM FONTS & RESET --- */
+        * { box-sizing: border-box; user-select: none; }
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            /* Geneva and Tahoma simulate the classic Charcoal/Chicago Mac OS look */
+            font-family: Geneva, Tahoma, Verdana, sans-serif; 
+            background-color: #5A6985; /* Classic Mac OS Desktop Blue */
+            overflow: hidden; font-size: 12px; color: #000;
+        }
+
+        /* --- THE MENU BAR (TOP) --- */
+        #menu-bar {
+            position: fixed; top: 0; left: 0; width: 100%; height: 24px;
+            background: #dddddd; border-bottom: 1px solid #000;
+            display: flex; align-items: center; z-index: 9999;
+            box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
+        }
+        .menu-item {
+            padding: 0 10px; height: 100%; display: flex; align-items: center; cursor: default;
+        }
+        .menu-item:hover, .menu-item.active { background: #000080; color: white; }
+        .apple-logo { font-size: 14px; font-weight: bold; color: transparent; text-shadow: 0 0 0 #000; }
+        .menu-item:hover .apple-logo, .menu-item.active .apple-logo { text-shadow: 0 0 0 #fff; }
+        
+        #clock { margin-left: auto; padding-right: 15px; cursor: default; }
+
+        /* Dropdown Menus */
+        .dropdown {
+            position: absolute; top: 24px; left: 0; background: #dddddd;
+            border: 1px solid #000; border-top: none; display: none;
+            flex-direction: column; min-width: 150px;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        .dropdown-item { padding: 5px 15px; cursor: default; }
+        .dropdown-item:hover { background: #000080; color: white; }
+        .divider { border-top: 1px solid #888; border-bottom: 1px solid #fff; margin: 2px 0; }
+
+        /* --- THE DESKTOP & ICONS --- */
+        #desktop {
+            position: absolute; top: 24px; left: 0; right: 0; bottom: 0; padding: 10px;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 20px;
+        }
+        .icon {
+            width: 60px; text-align: center; cursor: pointer; color: white;
+            font-size: 11px; text-shadow: 1px 1px 0 #000;
+        }
+        .icon img, .icon-placeholder {
+            width: 40px; height: 40px; margin: 0 auto 5px; display: block;
+            background: #dddddd; border: 1px solid #000; line-height: 38px; text-shadow: none;
+            color: black; font-size: 24px;
+        }
+        .icon.selected .icon-placeholder { background: #333; color: white; filter: invert(1); }
+        .icon.selected span { background: #000080; color: white; text-shadow: none; padding: 0 2px; }
+
+        /* --- MAC OS 8 WINDOW SYSTEM (PLATINUM THEME) --- */
+        .window {
+            position: absolute; top: 50px; left: 50px;
+            background: #dddddd; border: 1px solid #000;
+            display: none; flex-direction: column;
+            box-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+            /* Inner platinum bevel */
+            box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #888, 2px 2px 0 rgba(0,0,0,0.5);
+        }
+        .title-bar {
+            height: 20px; margin: 2px; border: 1px solid #000;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 3px; cursor: default;
+            /* Classic Pinstripe Effect */
+            background: repeating-linear-gradient(to bottom, #fff 0, #fff 1px, #ccc 1px, #ccc 2px);
+        }
+        .window.inactive .title-bar {
+            background: #dddddd; /* Loses pinstripes when inactive */
+        }
+        .title-text {
+            background: #dddddd; padding: 0 10px; font-weight: bold;
+            font-size: 12px; letter-spacing: 0.5px; border-left: 1px solid #dddddd; border-right: 1px solid #dddddd;
+        }
+        
+        /* Window Controls */
+        .mac-btn {
+            width: 12px; height: 12px; border: 1px solid #000; background: #fff;
+            box-shadow: inset 1px 1px 0 #ccc; cursor: pointer;
+        }
+        .mac-btn:active { background: #888; box-shadow: inset 1px 1px 0 #000; }
+        .close-btn { margin-right: auto; }
+        .collapse-btn { margin-left: auto; }
+
+        .content {
+            padding: 10px; background: #fff; border-top: 1px solid #000; flex-grow: 1;
+            margin: 0 2px 2px 2px; border: 1px solid #888; border-top: 1px solid #555;
+            overflow-y: auto; cursor: default;
+        }
+
+        /* --- APP SPECIFIC STYLES --- */
+        /* Calculator */
+        #calcWin { width: 200px; }
+        #calc-display {
+            width: 100%; height: 30px; border: 2px inset #ccc; margin-bottom: 10px;
+            text-align: right; font-size: 16px; padding: 5px; background: #fff; font-family: monospace;
+        }
+        .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+        .calc-btn {
+            padding: 8px 0; border: 1px solid #000; background: #dddddd;
+            box-shadow: inset 1px 1px 0 #fff, inset -1px -1px 0 #888;
+            font-weight: bold; cursor: pointer; text-align: center;
+        }
+        .calc-btn:active { box-shadow: inset 1px 1px 0 #888, inset -1px -1px 0 #fff; }
+        
+        /* NotePad */
+        #notesWin { width: 350px; height: 300px; }
+        #notepad-area {
+            width: 100%; height: 100%; resize: none; border: none; outline: none;
+            background: #ffffcc; font-family: monospace; font-size: 14px;
+        }
+
+        /* About Mac */
+        #aboutWin { width: 320px; }
+        .mac-face { font-size: 40px; float: left; margin-right: 15px; }
+
+    </style>
+</head>
+<body>
+
+<div id="menu-bar">
+    <div class="menu-item" id="apple-menu-btn" onclick="toggleDropdown('apple-dropdown', event)">
+        <span class="apple-logo"></span>
+        <div id="apple-dropdown" class="dropdown">
+            <div class="dropdown-item" onclick="openApp('aboutWin')">About This Computer</div>
+            <div class="divider"></div>
+            <div class="dropdown-item" onclick="openApp('calcWin')">Calculator</div>
+            <div class="dropdown-item" onclick="openApp('notesWin')">SimpleText</div>
+            <div class="divider"></div>
+            <div class="dropdown-item" onclick="alert('Shutting down... just kidding.')">Shut Down</div>
+        </div>
+    </div>
+    <div class="menu-item">File</div>
+    <div class="menu-item">Edit</div>
+    <div class="menu-item">View</div>
+    <div class="menu-item">Special</div>
+    <div class="menu-item">Help</div>
+    <div id="clock">12:00 PM</div>
+</div>
+
+<div id="desktop" onclick="deselectIcons(event)">
+    <div class="icon" id="hd-icon" onclick="selectIcon('hd-icon', event)" ondblclick="openApp('finderWin')">
+        <div class="icon-placeholder">💽</div>
+        <span>Macintosh HD</span>
+    </div>
+    <div class="icon" id="file-icon" onclick="selectIcon('file-icon', event)" ondblclick="openApp('notesWin')">
+        <div class="icon-placeholder">📝</div>
+        <span>ReadMe</span>
+    </div>
+    <div style="flex-grow: 1;"></div>
+    <div class="icon" id="trash-icon" onclick="selectIcon('trash-icon', event)">
+        <div class="icon-placeholder">🗑️</div>
+        <span>Trash</span>
+    </div>
+</div>
+
+<div id="aboutWin" class="window">
+    <div class="title-bar" ondblclick="windowShade('aboutWin')">
+        <div class="mac-btn close-btn" onclick="closeApp('aboutWin')"></div>
+        <div class="title-text">About This Computer</div>
+        <div class="mac-btn collapse-btn" onclick="windowShade('aboutWin')"></div>
+    </div>
+    <div class="content" style="background: #dddddd;">
+        <div class="mac-face">💻</div>
+        <div>
+            <h2>Mac OS 8</h2>
+            <p>Version 8.1</p>
+            <p>Built-in Memory: 32 MB</p>
+            <p>Virtual Memory: 64 MB</p>
+            <hr style="border: 0; border-top: 1px solid #888; border-bottom: 1px solid #fff;">
+            <p>&copy; 1983-1997 Apple Computer, Inc.</p>
+        </div>
+    </div>
+</div>
+
+<div id="finderWin" class="window" style="width: 400px; height: 250px;">
+    <div class="title-bar" ondblclick="windowShade('finderWin')">
+        <div class="mac-btn close-btn" onclick="closeApp('finderWin')"></div>
+        <div class="title-text">Macintosh HD</div>
+        <div class="mac-btn collapse-btn" onclick="windowShade('finderWin')"></div>
+    </div>
+    <div class="content" style="display: flex; gap: 20px; padding: 20px;">
+        <div class="icon" ondblclick="openApp('aboutWin')">
+            <div class="icon-placeholder" style="background: #fff;">⚙️</div>
+            <span style="color: black; text-shadow: none;">System</span>
+        </div>
+        <div class="icon" ondblclick="openApp('calcWin')">
+            <div class="icon-placeholder" style="background: #fff;">🧮</div>
+            <span style="color: black; text-shadow: none;">Calculator</span>
+        </div>
+        <div class="icon" ondblclick="openApp('notesWin')">
+            <div class="icon-placeholder" style="background: #fff;">📝</div>
+            <span style="color: black; text-shadow: none;">SimpleText</span>
+        </div>
+    </div>
+</div>
+
+<div id="calcWin" class="window">
+    <div class="title-bar" ondblclick="windowShade('calcWin')">
+        <div class="mac-btn close-btn" onclick="closeApp('calcWin')"></div>
+        <div class="title-text">Calculator</div>
+        <div class="mac-btn collapse-btn" onclick="windowShade('calcWin')"></div>
+    </div>
+    <div class="content" style="background: #dddddd;">
+        <div id="calc-display">0</div>
+        <div class="calc-grid">
+            <div class="calc-btn" onclick="calcInput('7')">7</div>
+            <div class="calc-btn" onclick="calcInput('8')">8</div>
+            <div class="calc-btn" onclick="calcInput('9')">9</div>
+            <div class="calc-btn" onclick="calcInput('/')">/</div>
+            
+            <div class="calc-btn" onclick="calcInput('4')">4</div>
+            <div class="calc-btn" onclick="calcInput('5')">5</div>
+            <div class="calc-btn" onclick="calcInput('6')">6</div>
+            <div class="calc-btn" onclick="calcInput('*')">X</div>
+            
+            <div class="calc-btn" onclick="calcInput('1')">1</div>
+            <div class="calc-btn" onclick="calcInput('2')">2</div>
+            <div class="calc-btn" onclick="calcInput('3')">3</div>
+            <div class="calc-btn" onclick="calcInput('-')">-</div>
+            
+            <div class="calc-btn" onclick="calcInput('C')">C</div>
+            <div class="calc-btn" onclick="calcInput('0')">0</div>
+            <div class="calc-btn" onclick="calcInput('=')">=</div>
+            <div class="calc-btn" onclick="calcInput('+')">+</div>
+        </div>
+    </div>
+</div>
+
+<div id="notesWin" class="window">
+    <div class="title-bar" ondblclick="windowShade('notesWin')">
+        <div class="mac-btn close-btn" onclick="closeApp('notesWin')"></div>
+        <div class="title-text">ReadMe - SimpleText</div>
+        <div class="mac-btn collapse-btn" onclick="windowShade('notesWin')"></div>
+    </div>
+    <div class="content" style="padding: 0;">
+        <textarea id="notepad-area" spellcheck="false">Welcome to Mac OS 8 Web Edition!
+
+Feel free to drag these windows around.
+Double click the title bar to trigger the classic "WindowShade" effect.
+</textarea>
+    </div>
+</div>
+
+<script>
+    let highestZ = 100;
+    
+    // --- MENU LOGIC ---
+    function toggleDropdown(id, event) {
+        event.stopPropagation();
+        const drop = document.getElementById(id);
+        const menuBtn = event.currentTarget;
+        
+        if (drop.style.display === 'flex') {
+            drop.style.display = 'none';
+            menuBtn.classList.remove('active');
+        } else {
+            // Close others first
+            document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
+            document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+            
+            drop.style.display = 'flex';
+            menuBtn.classList.add('active');
+        }
+    }
+
+    // Close menus if clicked outside
+    window.onclick = function() {
+        document.querySelectorAll('.dropdown').forEach(d => d.style.display = 'none');
+        document.querySelectorAll('.menu-item').forEach(m => m.classList.remove('active'));
+    };
+
+    // --- ICON LOGIC ---
+    function selectIcon(id, event) {
+        event.stopPropagation();
+        deselectIcons();
+        document.getElementById(id).classList.add('selected');
+    }
+    
+    function deselectIcons(event) {
+        document.querySelectorAll('.icon').forEach(icon => icon.classList.remove('selected'));
+    }
+
+    // --- WINDOW MANAGEMENT ---
+    function openApp(id) {
+        const win = document.getElementById(id);
+        win.style.display = 'flex';
+        focusWindow(win);
+    }
+
+    function closeApp(id) {
+        document.getElementById(id).style.display = 'none';
+    }
+
+    function focusWindow(win) {
+        highestZ++;
+        win.style.zIndex = highestZ;
+        
+        // Remove active state from all
+        document.querySelectorAll('.window').forEach(w => w.classList.add('inactive'));
+        // Add active state to target
+        win.classList.remove('inactive');
+    }
+
+    // WindowShade Effect (Roll up window)
+    function windowShade(id) {
+        const win = document.getElementById(id);
+        const content = win.querySelector('.content');
+        
+        if (content.style.display === 'none') {
+            content.style.display = 'block'; // Unshade
+            // Restore height if it was explicitly set
+            if(win.dataset.fullHeight) win.style.height = win.dataset.fullHeight;
+        } else {
+            // Save height before shading
+            win.dataset.fullHeight = win.style.height || getComputedStyle(win).height;
+            content.style.display = 'none'; // Shade
+            win.style.height = 'auto'; // Shrink to title bar
+        }
+    }
+
+    // --- DRAGGING LOGIC (interact.js) ---
+    // Make windows focus when clicked
+    document.querySelectorAll('.window').forEach(win => {
+        win.addEventListener('mousedown', () => focusWindow(win));
+    });
+
+    interact('.window').draggable({
+        allowFrom: '.title-bar',
+        listeners: {
+            start(event) { focusWindow(event.target); },
+            move(event) {
+                const target = event.target;
+                const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+                const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+                target.style.transform = `translate(${x}px, ${y}px)`;
+                target.setAttribute('data-x', x);
+                target.setAttribute('data-y', y);
+            }
+        }
+    });
+
+    // --- CALCULATOR LOGIC ---
+    let calcStr = "";
+    function calcInput(val) {
+        const display = document.getElementById('calc-display');
+        if (val === 'C') {
+            calcStr = "";
+            display.innerText = "0";
+        } else if (val === '=') {
+            try {
+                // A very basic safe math evaluation for simple calculators
+                let result = new Function('return ' + calcStr)(); 
+                // Round to avoid crazy floats
+                result = Math.round(result * 100000000) / 100000000;
+                display.innerText = result;
+                calcStr = result.toString();
+            } catch (e) {
+                display.innerText = "Err";
+                calcStr = "";
+            }
+        } else {
+            calcStr += val;
+            display.innerText = calcStr;
+        }
+    }
+
+    // --- CLOCK LOGIC ---
+    function updateClock() {
+        const now = new Date();
+        let hours = now.getHours();
+        let minutes = String(now.getMinutes()).padStart(2, '0');
+        let ampm = hours >= 12 ? 'PM' : 'AM';
+        hours = hours % 12 || 12;
+        document.getElementById('clock').innerText = `${hours}:${minutes} ${ampm}`;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+</script>
+
+</body>
+</html>
