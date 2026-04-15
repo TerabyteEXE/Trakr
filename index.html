@@ -79,3 +79,103 @@
             <p class="font-mono uppercase tracking-[0.5em] opacity-60 mt-4 text-[10px] md:text-sm">Utility Software Archive // v1.8.2</p>
         </div>
         <button onclick="toggleTheme()" class="btn-link !py-1 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<body class="p-8 md:p-20">
+
+    <header class="max-w-4xl mx-auto mb-16 border-b-8 border-[var(--border)] pb-8 flex justify-between items-end">
+        <div>
+            <h1 class="text-6xl font-black tracking-tighter italic rgb-title">TERABYTE_EXE</h1>
+            <p class="font-mono uppercase tracking-[0.5em] opacity-60 mt-4 text-[10px] md:text-sm">Utility Software Archive // v1.8.2</p>
+        </div>
+        <button onclick="toggleTheme()" class="btn-link !py-1 !px-3 text-[10px] mb-2">MODE</button>
+    </header>
+
+    <main class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12">
+        <div class="blocky-card p-8 flex flex-col justify-between">
+            <div>
+                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">WIP</span>
+                <h2 class="text-3xl font-black mt-4 mb-2">DG_Trakr</h2>
+                <p class="text-sm opacity-70 mb-6">Beautiful disc golf score tracking.</p>
+            </div>
+            <a href="./dg-trakr/dg-trakr.html" class="btn-link">Initialize_Trakr</a>
+        </div>
+
+        <div class="blocky-card p-8 flex flex-col justify-between">
+            <div>
+                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">Stable</span>
+                <h2 class="text-3xl font-black mt-4 mb-2">Flipper</h2>
+                <p class="text-sm opacity-70 mb-6">Flip a coin.</p>
+            </div>
+            <a href="./flipper/flipper.html" class="btn-link">Initialize_Flip</a>
+        </div>
+
+        <div class="blocky-card p-8 flex flex-col justify-between">
+            <div>
+                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">WIP</span>
+                <h2 class="text-3xl font-black mt-4 mb-2">My_Bag</h2>
+                <p class="text-sm opacity-70 mb-6">My Disc Catalog.</p>
+            </div>
+            <a href="./mybag/mybag.html" class="btn-link">Initialize_My_Bag</a>
+        </div>
+        <div class="blocky-card p-8 flex flex-col justify-between">
+            <div>
+                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">Stable</span>
+                <h2 class="text-3xl font-black mt-4 mb-2">Vault_Key</h2>
+                <p class="text-sm opacity-70 mb-6">Make passwords.</p>
+            </div>
+            <a href="./password/password.html" class="btn-link">Initialize_Vault</a>
+        </div>
+        <div class="blocky-card p-8 flex flex-col justify-between">
+            <div>
+                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">Stable</span>
+                <h2 class="text-3xl font-black mt-4 mb-2">Tic_Tac_Toe</h2>
+                <p class="text-sm opacity-70 mb-6">Is this not clear enough?</p>
+            </div>
+            <a href="./game/game.html" class="btn-link">Initialize_Game</a>
+        </div>
+        <div class="blocky-card p-8 flex flex-col justify-between border-dashed opacity-60">
+    <div>
+        <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase tracking-widest">
+            Pending
+        </span>
+        
+        <h2 class="text-3xl font-black mt-4 mb-2 uppercase italic tracking-tighter">
+            System_Offline
+        </h2>
+        
+        <div class="space-y-2 mt-4">
+            <div class="h-2 w-full bg-[var(--text)] opacity-10"></div>
+            <div class="h-2 w-3/4 bg-[var(--text)] opacity-10"></div>
+            <div class="h-2 w-1/2 bg-[var(--text)] opacity-10"></div>
+        </div>
+    </div>
+
+    <div class="mt-8 py-3 border-2 border-[var(--border)] text-center font-mono text-xs uppercase tracking-[0.3em]">
+        [ COMING_SOON ]
+    </div>
+</div>
+    </main>
+
+    <footer class="max-w-4xl mx-auto mt-20 font-mono text-[10px] uppercase opacity-40">
+  By <a href="https://github.com/TerabyteEXE" class="hover:underline hover:opacity-100 transition-opacity">Terabyte_EXE</a>
+</footer>
+
+    <script>
+        let currentTheme = localStorage.getItem('dg_theme') || 'light';
+
+        function applyTheme() {
+            document.documentElement.setAttribute('data-theme', currentTheme);
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
+            localStorage.setItem('dg_theme', currentTheme);
+            applyTheme();
+        }
+
+        applyTheme();
+    </script>
+</body>
+</html>
