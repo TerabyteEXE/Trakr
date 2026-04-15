@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Disc_Archive | TERABYTE_EXE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --bg: #f2f2f0; --card: #ffffff; --text: #000000; --border: #000000; }
+        [data-theme='dark'] { --bg: #111111; --card: #1a1a1a; --text: #ffffff; --border: #ffffff; }
+        
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+        .blocky-card { background: var(--card); border: 4px solid var(--border); box-shadow: 8px 8px 0px var(--border); transition: all 0.1s; }
+        .btn-link { background: var(--text); color: var(--bg); border: 2px solid var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 800; text-transform: uppercase; transition: all 0.1s; display: block; text-align: center; }
+        .btn-link:hover { background: var(--bg); color: var(--text); }
+        
+        .flight-box { border: 2px solid var(--border); font-family: 'JetBrains Mono', monospace; }
+        .disc-img { grayscale: 100%; transition: grayscale 0.3s ease; object-fit: contain; padding: 10px; }
+        .blocky-card:hover .disc-img { grayscale: 0%; }
+    </style>
+</head>
+<body class="p-8 md:p-20">
+
+    <header class="max-w-6xl mx-auto mb-12 border-b-8 border-[var(--border)] pb-6 flex justify-between items-end">
+        <div>
+            <h1 class="text-5xl font-black italic tracking-tighter">DISC_ARCHIVE</h1>
+            <p class="font-mono uppercase tracking-[0.3em] opacity-60 text-xs mt-2">Equipment Manifest // Physical Assets</p>
+        </div>
+        <a href="../index.html" class="btn-link !py-1 !px-4 text-xs mb-2">Return_Home</a>
+    </header>
+
+    <nav class="max-w-6xl mx-auto mb-12 flex gap-4 font-mono text-xs uppercase overflow-x-auto pb-4">
+        <button onclick="filterDiscs('all')" class="border-b-4 border-black px-2 hover:bg-black hover:text-white">All_Stock</button>
+        <button onclick="filterDiscs('Driver')" class="border-b-4 border-transparent px-2 hover:border-black">Drivers</button>
+        <button onclick="filterDiscs('Midrange')" class="border-b-4 border-transparent px-2 hover:border-black">Mids</button>
+        <button onclick="filterDiscs('Putter')" class="border-b-4 border-transparent px-2 hover:border-black">Putters</button>
+    </nav>
+
+    <main id="catalog" class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        </main>
+
+    <script>
+        const myDiscs = [
+            {
+                name: "Innova Destroyer",
+                type: "Driver",
+                brand: "Innova",
+                plastic: "Star",
+                stats: [12, 5, -1, 3],
+                amazon: "https://www.amazon.com/Innova-Star-Destroyer-Golf-Disc/dp/B0032UP0T0",
+                img: "https://m.media-amazon.com/images/I/618m6Yc0XkL._AC_SL1000_.jpg"
+            },
+            {
+                name: "Discraft Buzzz",
+                type: "Midrange",
+                brand: "Discraft",
+                plastic: "Z-Line",
+                stats: [5, 4, -1, 1],
+                amazon: "https://www.amazon.com/Discraft-Buzzz-Golf-Disc-175-177g/dp/B0032S8T3A",
+                img: "https://m.media-amazon.com/images/I/61N+3S8G4PL._AC_SL1200_.jpg"
+            }
+        ];
+
+        function render(filter = 'all') {
+            const container = document.getElementById('catalog');
+            const filtered = filter === 'all' ? myDiscs : myDiscs.filter(d => d.type === filter);
+            
+            container.innerHTML = filtered.map(disc => `
+                <div class="blocky-card flex flex-col">
+                    <div class="h-64 bg-white flex items-center justify-center border-b-4 border-black">
+                        <img src="${disc.img}" class="disc-img h-full w-full" alt="${disc.name}">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start mb-4">
+                            <div>
+                                <h2 class="text-2xl font-black italic uppercase leading-none">${disc.name}</h2>
+                                <p class="font-mono text-[10px] opacity-60 mt-1">${disc.brand} // ${disc.plastic}</p>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-4 gap-2 mb-6 font-mono text-center">
+                            ${['SPD', 'GLD', 'TRN', 'FDE'].map((label, i) => `
+                                <div class="flight-box py-1">
+                                    <div class="text-[8px] opacity-50">${label}</div>
+                                    <div class="font-black text-lg">${disc.stats[i]}</div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <a href="${disc.amazon}" target="_blank" class="btn-link py-3 text-sm">Access_Amazon_Listing</a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterDiscs(type) {
+            render(type);
+        }
+
+        // Initialize theme and render
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('dg_theme') || 'light');
+        render();
+    </script>
+</body>
+</html>
