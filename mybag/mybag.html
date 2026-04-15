@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,14 +10,14 @@
         :root { --bg: #f2f2f0; --card: #ffffff; --text: #000000; --border: #000000; }
         [data-theme='dark'] { --bg: #111111; --card: #1a1a1a; --text: #ffffff; --border: #ffffff; }
         
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; }
         .blocky-card { background: var(--card); border: 4px solid var(--border); box-shadow: 8px 8px 0px var(--border); transition: all 0.1s; }
-        .btn-link { background: var(--text); color: var(--bg); border: 2px solid var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 800; text-transform: uppercase; transition: all 0.1s; display: block; text-align: center; }
+        .btn-link { background: var(--text); color: var(--bg); border: 2px solid var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 800; text-transform: uppercase; transition: all 0.1s; display: block; text-align: center; text-decoration: none; }
         .btn-link:hover { background: var(--bg); color: var(--text); }
         
         .flight-box { border: 2px solid var(--border); font-family: 'JetBrains Mono', monospace; }
-        .disc-img { grayscale: 100%; transition: grayscale 0.3s ease; object-fit: contain; padding: 10px; }
-        .blocky-card:hover .disc-img { grayscale: 0%; }
+        .disc-img { filter: grayscale(100%); transition: filter 0.3s ease; object-fit: contain; padding: 10px; }
+        .blocky-card:hover .disc-img { filter: grayscale(0%); }
     </style>
 </head>
 <body class="p-8 md:p-20">
@@ -47,7 +47,7 @@
                 type: "Midrange",
                 brand: "MVP",
                 plastic: "Star",
-                stats: [5, 5, 3, 0.5],
+                stats: [5, 5, -3, 0.5],
                 amazon: "https://a.co/d/00gaTOjx",
                 img: "https://m.media-amazon.com/images/I/61EQLubuqaL._AC_SX466_.jpg"
             },
@@ -55,17 +55,21 @@
                 name: "Ion",   
                 type: "Putter",   
                 brand: "MVP",   
+                plastic: "Proton",
                 stats: [2.5, 3, 0, 1],
+                amazon: "#",
                 img: "https://m.media-amazon.com/images/I/61g6zTcYz-L._AC_SX679_.jpg"
-            }
-            ],
+            },
             {
                 name: "Relay",
-                type: "Fairway Driver",
+                type: "Driver",
                 brand: "MVP",
-                stats: [6, 5, 2, 1],
+                plastic: "Neutron",
+                stats: [6, 5, -2, 1],
+                amazon: "https://a.co/d/fixed-link",
                 img: "https://m.media-amazon.com/images/I/51k3pMymaYS._AC_SY300_SX300_QL70_FMwebp_.jpg"
-               }:
+            }
+        ];
 
         function render(filter = 'all') {
             const container = document.getElementById('catalog');
@@ -80,7 +84,7 @@
                         <div class="flex justify-between items-start mb-4">
                             <div>
                                 <h2 class="text-2xl font-black italic uppercase leading-none">${disc.name}</h2>
-                                <p class="font-mono text-[10px] opacity-60 mt-1">${disc.brand} // ${disc.plastic}</p>
+                                <p class="font-mono text-[10px] opacity-60 mt-1">${disc.brand} // ${disc.plastic || 'N/A'}</p>
                             </div>
                         </div>
 
