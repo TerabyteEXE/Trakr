@@ -10,18 +10,21 @@
 </head>
 <body class="p-4 md:p-10">
 
-   <header class="max-w-6xl mx-auto mb-12 border-b-4 border-[var(--border)] pb-6">
-    <a href="../index.html" class="blocky-card px-2 py-1 text-[10px] font-black uppercase mb-4 inline-block hover:bg-[var(--text)] hover:text-[var(--bg)] transition-colors">
-        ← BACK_TO_HUB
-    </a>
-    
-    <div class="flex justify-between items-start">
+   <<header class="max-w-6xl mx-auto mb-12 flex justify-between items-start border-b-4 border-[var(--border)] pb-6">
+    <div class="flex flex-col items-start">
+        <a href="../index.html" class="btn-outline px-2 py-0.5 text-[9px] font-bold mb-4 flex items-center gap-1 hover:bg-black hover:text-white transition-all">
+            <span>←</span> SYSTEM_HUB
+        </a>
+        
         <div>
             <h1 class="text-4xl font-black tracking-tighter leading-none">DG_Trakr</h1>
             <p class="font-mono text-[10px] uppercase mt-2 tracking-[0.3em] opacity-50">Disc Golf Tracking Made Easy | By Terabyte_EXE</p>
         </div>
-        <div class="flex gap-2">
-            </div>
+    </div>
+
+    <div class="flex gap-2">
+        <button onclick="toggleTheme()" class="btn-outline px-3 py-1 text-xs">Mode</button>
+        <button onclick="resetApp()" class="btn-solid bg-red-600 border-red-600 px-3 py-1 text-xs text-white">Reset</button>
     </div>
 </header>
 
