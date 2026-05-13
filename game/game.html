@@ -5,79 +5,68 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic_Tac_Toe | TERABYTE_EXE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        :root { --bg: #f2f2f0; --card: #ffffff; --text: #000000; --border: #000000; }
-        [data-theme='dark'] { --bg: #111111; --card: #1a1a1a; --text: #ffffff; --border: #ffffff; }
-        
-        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; transition: background 0.2s, color 0.2s; }
-        .blocky-card { background: var(--card); border: 4px solid var(--border); box-shadow: 8px 8px 0px var(--border); }
-        .btn-link { background: var(--text); color: var(--bg); border: 2px solid var(--text); font-family: 'JetBrains Mono', monospace; font-weight: 800; text-transform: uppercase; transition: all 0.1s; }
-        .btn-link:hover { background: var(--bg); color: var(--text); }
-
-        /* THE GAME BOARD GRID */
+        /* GAME BOARD GRID */
         .ttt-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
+            gap: 1px;
+            background: var(--te-border);
+            border: 1px solid var(--te-border);
         }
 
         .ttt-cell {
-            background: var(--card);
-            border: 4px solid var(--border);
+            background: var(--te-panel);
             aspect-ratio: 1 / 1;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.1s;
+            transition: background 0.1s;
         }
 
-        .ttt-cell:hover {
-            transform: translate(-2px, -2px);
-            box-shadow: 6px 6px 0px var(--border);
-        }
+        .ttt-cell:hover { background: var(--te-bg); }
 
-        .ttt-cell:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px var(--border);
-        }
+        .symbol-x { color: var(--te-orange); }
+        .symbol-o { color: var(--te-text); opacity: 0.8; }
 
-        .symbol-x {
-            color: #ff0055; /* Tech Red */
-            text-shadow: 2px 2px 0px var(--border);
-        }
-
-        .symbol-o {
-            color: #00ffff; /* Cyber Cyan */
-            text-shadow: 2px 2px 0px var(--border);
-        }
-
-        /* WINNING LINE ANIMATION */
+        /* WINNING STATE */
         .ttt-cell.winning-cell {
-            background: var(--text);
+            background: var(--te-orange) !important;
             animation: glitch-blink 0.2s steps(2) infinite;
         }
 
+        .ttt-cell.winning-cell span { color: white !important; }
+
         @keyframes glitch-blink {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.95) skew(2deg); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; transform: skew(1deg); }
         }
     </style>
 </head>
-<body class="p-8 flex flex-col items-center justify-center min-h-screen">
+<body class="flex items-center justify-center min-h-screen">
 
-    <div class="blocky-card p-8 w-full max-w-sm">
-        <header class="mb-8 border-b-4 border-[var(--border)] pb-4 flex justify-between items-start gap-4">
-            <div>
-                <h1 class="text-3xl font-black italic">X_O_PROTOCOL</h1>
-                <p class="font-mono text-[10px] uppercase opacity-50 mt-1">Noughts & Crosses // v0.9.1</p>
+    <div class="te-grid w-full max-w-sm">
+        <header class="te-panel !min-h-0 border-b-0">
+            <div class="flex justify-between items-start w-full">
+                <div>
+                    <p class="label">Logic_Game</p>
+                    <h1 class="text-xl font-bold">X_O_PROTOCOL</h1>
+                    <p class="label mt-1">Noughts & Crosses // v0.9.1</p>
+                </div>
+                <a href="../index.html" class="te-key" title="Return Home">←</a>
             </div>
-            <a href="../index.html" class="btn-link !py-1 !px-3 text-[10px] mt-1 whitespace-nowrap">Home_Exit</a>
         </header>
 
-        <div class="font-mono text-sm uppercase mb-6 text-center tracking-wider" id="status">
-            Active Turn: <span class="font-bold symbol-x" id="turnIndicator">X</span>
+        <div class="te-panel !min-h-0">
+            <div class="flex justify-between items-center">
+                <p class="label">System_Status</p>
+                <div class="font-mono text-[10px] uppercase tracking-wider" id="status">
+                    Turn: <span class="font-bold symbol-x" id="turnIndicator">X</span>
+                </div>
+            </div>
         </div>
 
         <div class="ttt-grid" id="board">
@@ -92,7 +81,12 @@
             <div class="ttt-cell" onclick="handleCellClick(8)"></div>
         </div>
 
-        <button onclick="resetGame()" class="btn-link w-full py-3 mt-8 text-sm">Initialize_Reset</button>
+        <div class="te-panel !min-h-0 bg-neutral-200">
+            <div class="flex justify-between items-center">
+                <p class="label">Global_Reset</p>
+                <button onclick="resetGame()" class="te-key orange !w-24 !h-8 !rounded-sm text-[10px]">INITIALIZE</button>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -100,18 +94,16 @@
         let gameActive = true;
         let gameState = ["", "", "", "", "", "", "", "", ""];
         const statusDisplay = document.getElementById('status');
-        const turnIndicator = document.getElementById('turnIndicator');
         const cells = document.querySelectorAll('.ttt-cell');
 
         const winningConditions = [
-            [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
-            [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
-            [0, 4, 8], [2, 4, 6]  // Diagonals
+            [0, 1, 2], [3, 4, 5], [6, 7, 8],
+            [0, 3, 6], [1, 4, 7], [2, 5, 8],
+            [0, 4, 8], [2, 4, 6]
         ];
 
         function handleCellClick(cellIndex) {
             if (gameState[cellIndex] !== "" || !gameActive) return;
-
             gameState[cellIndex] = currentPlayer;
             updateCellDisplay(cellIndex);
             checkResult();
@@ -119,7 +111,7 @@
 
         function updateCellDisplay(index) {
             const symbol = currentPlayer;
-            cells[index].innerHTML = `<span class="text-6xl font-black ${symbol === 'X' ? 'symbol-x' : 'symbol-o'}">${symbol}</span>`;
+            cells[index].innerHTML = `<span class="text-4xl font-bold ${symbol === 'X' ? 'symbol-x' : 'symbol-o'}">${symbol}</span>`;
         }
 
         function checkResult() {
@@ -137,21 +129,19 @@
 
             if (roundWon) {
                 gameActive = false;
-                statusDisplay.innerHTML = `Data Corrupted. <span class="font-bold ${currentPlayer === 'X' ? 'symbol-x' : 'symbol-o'}">${currentPlayer}</span> Gains Control.`;
+                statusDisplay.innerHTML = `CORRUPT: <span class="font-bold ${currentPlayer === 'X' ? 'symbol-x' : 'symbol-o'}">${currentPlayer}</span>_WON`;
                 highlightWin(winningLine);
                 return;
             }
 
             if (!gameState.includes("")) {
                 gameActive = false;
-                statusDisplay.innerHTML = "Draw. Grid Neutralized.";
+                statusDisplay.innerHTML = "DRAW: GRID_NEUTRAL";
                 return;
             }
 
-            // Switch Player
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            turnIndicator.innerText = currentPlayer;
-            turnIndicator.className = `font-bold ${currentPlayer === 'X' ? 'symbol-x' : 'symbol-o'}`;
+            statusDisplay.innerHTML = `Turn: <span class="font-bold ${currentPlayer === 'X' ? 'symbol-x' : 'symbol-o'}" id="turnIndicator">${currentPlayer}</span>`;
         }
 
         function highlightWin(line) {
@@ -164,23 +154,16 @@
             gameActive = true;
             currentPlayer = 'X';
             gameState = ["", "", "", "", "", "", "", "", ""];
-            
-            // Re-render initial status
-            statusDisplay.innerHTML = `Active Turn: <span class="font-bold symbol-x" id="turnIndicator">X</span>`;
-            
-            // Redefine reference to turnIndicator after innerHTML replace
-            const newTurnIndicator = document.getElementById('turnIndicator');
-            
-            // Clear cells and remove classes
+            statusDisplay.innerHTML = `Turn: <span class="font-bold symbol-x" id="turnIndicator">X</span>`;
             cells.forEach(cell => {
                 cell.innerHTML = "";
                 cell.classList.remove('winning-cell');
             });
         }
 
-        // Initialize theme and apply it immediately
-        const currentTheme = localStorage.getItem('dg_theme') || 'light';
-        document.documentElement.setAttribute('data-theme', currentTheme);
+        // Theme persistent logic
+        const currentTheme = localStorage.getItem('te_theme');
+        if (currentTheme === 'dark') document.body.setAttribute('data-theme', 'dark');
     </script>
 </body>
 </html>
