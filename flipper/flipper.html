@@ -5,112 +5,69 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Flipper | Terabyte_EXE</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
     <style>
-        /* THEME VARIABLES (Synced with Hub) */
-        :root { 
-            --bg: #f2f2f0; 
-            --card: #ffffff; 
-            --text: #000000; 
-            --border: #000000; 
-        }
-
-        [data-theme='dark'] { 
-            --bg: #111111; 
-            --card: #1a1a1a; 
-            --text: #ffffff; 
-            --border: #ffffff; 
-        }
-
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Inter', sans-serif; 
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .blocky-card { 
-            background: var(--card); 
-            border: 4px solid var(--border); 
-            box-shadow: 8px 8px 0px var(--border);
-            transition: all 0.1s;
-        }
-
-        .btn-solid {
-            background: var(--text);
-            color: var(--bg);
-            border: 2px solid var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 800;
-            text-transform: uppercase;
-            transition: all 0.1s;
-        }
-
-        .btn-solid:active { 
-            transform: translate(4px, 4px); 
-            box-shadow: none; 
-        }
-
-        .btn-outline {
-            background: transparent;
-            color: var(--text);
-            border: 2px solid var(--text);
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 800;
-            text-transform: uppercase;
-            transition: all 0.1s;
-        }
-
         /* Coin Animation */
         .coin-spin { animation: spin 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
         
         @keyframes spin {
             0% { transform: scale(1) rotateY(0deg); }
-            50% { transform: scale(1.2) rotateY(180deg); }
+            50% { transform: scale(1.1) rotateY(180deg); }
             100% { transform: scale(1) rotateY(360deg); }
+        }
+
+        .history-badge {
+            border: 1px solid var(--te-border);
+            padding: 2px 6px;
+            font-size: 10px;
+        }
+        .history-badge.heads {
+            background: var(--te-orange);
+            color: white;
+            border-color: var(--te-orange);
         }
     </style>
 </head>
-<body class="p-6 md:p-16">
+<body class="flex items-center justify-center min-h-screen">
 
-    <header class="max-w-xl mx-auto mb-12 flex flex-col items-start border-b-4 border-[var(--border)] pb-6">
-        <a href="../index.html" class="btn-outline px-2 py-0.5 text-[9px] font-bold mb-4 hover:bg-[var(--text)] hover:text-[var(--bg)] transition-all">← SYSTEM_HUB</a>
-        <div class="flex justify-between w-full items-center">
-            <h1 class="text-4xl font-black tracking-tighter uppercase">Coin_Flip</h1>
-        </div>
-    </header>
+    <div class="te-grid w-full max-w-sm">
+        <header class="te-panel !min-h-0 border-b-0">
+            <div class="flex justify-between items-start w-full">
+                <div>
+                    <p class="label">Random_Gen</p>
+                    <h1 class="text-xl font-bold">COIN_FLIP</h1>
+                    <p class="label mt-1">Binary Outcome Protocol</p>
+                </div>
+                <a href="../index.html" class="te-key" title="Return Home">←</a>
+            </div>
+        </header>
 
-    <main class="max-w-xl mx-auto space-y-10">
-        <div id="coin-container" class="blocky-card aspect-square flex items-center justify-center">
-            <div id="coin-visual" class="w-48 h-48 rounded-full border-8 border-[var(--border)] flex items-center justify-center transition-colors">
-                <span id="coin-text" class="text-4xl font-black uppercase">READY</span>
+        <div class="te-panel aspect-square flex flex-col justify-center items-center">
+            <div id="coin-visual" class="w-32 h-32 rounded-full border-4 border-[var(--te-border)] flex items-center justify-center transition-colors">
+                <span id="coin-text" class="text-2xl font-bold uppercase">READY</span>
             </div>
         </div>
 
-        <button onclick="flipCoin()" class="btn-solid w-full py-6 text-2xl shadow-[8px_8px_0px_var(--border)]">FLIP_COIN</button>
-
-        <div class="blocky-card p-4">
-            <h3 class="text-[10px] font-bold uppercase opacity-40 mb-4 tracking-widest">Flip_History</h3>
-            <div id="flip-history" class="flex gap-2 flex-wrap font-mono text-sm">
+        <div class="te-panel !min-h-0 bg-neutral-200">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="label">Trigger</p>
+                    <p class="value">Execute_Flip</p>
                 </div>
+                <button onclick="flipCoin()" class="te-key orange !w-24 !h-10 !rounded-md">FLIP</button>
+            </div>
         </div>
-    </main>
+
+        <div class="te-panel !min-h-0">
+            <p class="label mb-3">Flip_History (Last 12)</p>
+            <div id="flip-history" class="flex gap-1.5 flex-wrap font-mono">
+                <p class="text-[10px] opacity-30 italic">No logs found...</p>
+            </div>
+        </div>
+    </div>
 
     <script>
-        // --- THEME LOGIC ---
-        function applyTheme() {
-            const currentTheme = localStorage.getItem('dg_theme') || 'light';
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        }
-
-        function toggleTheme() {
-            const current = document.documentElement.getAttribute('data-theme');
-            const next = current === 'light' ? 'dark' : 'light';
-            localStorage.setItem('dg_theme', next);
-            applyTheme();
-        }
-
-        // --- COIN LOGIC ---
         let history = [];
 
         function flipCoin() {
@@ -138,13 +95,14 @@
                 
                 // Render history items
                 historyContainer.innerHTML = history.map(item => 
-                    `<span class="border-2 border-[var(--border)] px-2 py-1 ${item === 'H' ? 'bg-[var(--text)] text-[var(--bg)]' : ''}">${item}</span>`
+                    `<span class="history-badge ${item === 'H' ? 'heads' : ''}">${item}</span>`
                 ).join('');
             }, 600);
         }
 
-        // Initialize theme on load
-        applyTheme();
+        // Maintain theme consistency
+        const currentTheme = localStorage.getItem('te_theme');
+        if (currentTheme === 'dark') document.body.setAttribute('data-theme', 'dark');
     </script>
 </body>
 </html>
