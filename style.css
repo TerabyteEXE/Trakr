@@ -1,0 +1,129 @@
+/* TERABYTE_EXE // SYSTEM STYLES 
+   Inspiration: Teenage Engineering / Industrial Design 
+*/
+
+:root {
+    /* LIGHT MODE (DEFAULT) */
+    --te-bg: #e5e5e5;
+    --te-panel: #f0f0f0;
+    --te-text: #222222;
+    --te-orange: #ff4d00;
+    --te-border: #cccccc;
+    --te-key-bg: #ffffff;
+    --te-key-shadow: #bbbbbb;
+    --te-font: 'JetBrains Mono', monospace;
+}
+
+[data-theme="dark"] {
+    /* DARK MODE (FIELD) */
+    --te-bg: #111111;
+    --te-panel: #1a1a1a;
+    --te-text: #e5e5e5;
+    --te-orange: #ff4d00;
+    --te-border: #333333;
+    --te-key-bg: #222222;
+    --te-key-shadow: #000000;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: var(--te-bg);
+    color: var(--te-text);
+    font-family: var(--te-font);
+    padding: 20px;
+    transition: background 0.2s ease;
+}
+
+/* TYPOGRAPHY */
+.label { 
+    font-size: 10px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.05em; 
+    opacity: 0.6; 
+    margin-bottom: 2px;
+}
+
+.value { 
+    font-size: 14px; 
+    font-weight: 700; 
+    text-transform: uppercase; 
+}
+
+h1, h2, h3 { 
+    letter-spacing: -0.05em; 
+    text-transform: uppercase; 
+}
+
+/* LAYOUT ENGINE */
+.te-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--te-border);
+    border: 1px solid var(--te-border);
+}
+
+.te-panel {
+    background: var(--te-panel);
+    padding: 20px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background 0.2s ease;
+}
+
+/* INTERACTIVES */
+.te-key {
+    width: 42px;
+    height: 42px;
+    background: var(--te-key-bg);
+    border-radius: 50%;
+    border: 1px solid var(--te-border);
+    box-shadow: 0 3px 0 var(--te-key-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+}
+
+.te-key:hover {
+    filter: brightness(1.05);
+}
+
+.te-key:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--te-key-shadow);
+}
+
+.te-key.orange {
+    background: var(--te-orange);
+    border-color: #cc3e00;
+    box-shadow: 0 3px 0 #cc3e00;
+    color: white;
+}
+
+/* HEADER/FOOTER */
+header {
+    border-bottom: 1px solid var(--te-border);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--te-border);
+}
