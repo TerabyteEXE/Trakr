@@ -5,165 +5,126 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Terabyte_EXE | App Suite</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&family=JetBrains+Mono:wght@500;800&display=swap" rel="stylesheet">
-    <style>
-        /* THEME VARIABLES */
-        :root { 
-            --bg: #f2f2f0; 
-            --card: #ffffff; 
-            --text: #000000; 
-            --border: #000000; 
-        }
-
-        [data-theme='dark'] { 
-            --bg: #111111; 
-            --card: #1a1a1a; 
-            --text: #ffffff; 
-            --border: #ffffff; 
-        }
-
-        body { 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Inter', sans-serif; 
-            transition: background 0.2s, color 0.2s;
-        }
-        
-        /* THE RGB EFFECT */
-        .rgb-title {
-            text-shadow: -3px -1.5px 0px #ff0000, 3px 1.5px 0px #00ffff;
-            transition: text-shadow 0.15s ease-in-out;
-        }
-
-        .rgb-title:hover {
-            text-shadow: -5px -2px 0px #ff00ff, 5px 2px 0px #00ff00;
-        }
-
-        .blocky-card { 
-            background: var(--card); 
-            border: 4px solid var(--border); 
-            box-shadow: 8px 8px 0px var(--border);
-            transition: all 0.1s;
-        }
-        
-        .blocky-card:hover { 
-            transform: translate(-2px, -2px); 
-            box-shadow: 10px 10px 0px var(--border); 
-        }
-
-        .btn-link {
-            background: var(--text);
-            color: var(--bg);
-            padding: 12px 20px;
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 800;
-            text-transform: uppercase;
-            text-align: center;
-            display: block;
-            border: 2px solid var(--text);
-            transition: all 0.1s;
-        }
-
-        .btn-link:hover {
-            background: var(--bg);
-            color: var(--text);
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-8 md:p-20">
+<body>
 
-    <header class="max-w-4xl mx-auto mb-16 border-b-8 border-[var(--border)] pb-8 flex justify-between items-end">
+    <header>
         <div>
-            <h1 class="text-6xl font-black tracking-tighter italic rgb-title">TERABYTE_EXE</h1>
-            <p class="font-mono uppercase tracking-[0.5em] opacity-60 mt-4 text-[10px] md:text-sm">Utility Software Archive // v1.8.2</p>
+            <p class="label">System Version: 1.8.2</p>
+            <h1 class="text-xl font-bold">TERABYTE_EXE // APPS</h1>
         </div>
-        <button onclick="toggleTheme()" class="btn-link !py-1 !px-3 text-[10px] mb-2">MODE</button>
+        <div class="flex gap-4">
+            <div class="text-right">
+                <p class="label">Archive_Status</p>
+                <p class="value">Index: 05</p>
+            </div>
+            <button class="te-key orange" onclick="toggleTheme()" aria-label="Toggle Theme"></button>
+        </div>
     </header>
 
-    <main class="max-w-4xl mx-auto grid md:grid-cols-2 gap-12">
-        <div class="blocky-card p-8 flex flex-col justify-between">
+    <main class="te-grid">
+        <div class="te-panel">
             <div>
-                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">WIP</span>
-                <h2 class="text-3xl font-black mt-4 mb-2">DG_Trakr</h2>
-                <p class="text-sm opacity-70 mb-6">Beautiful disc golf score tracking.</p>
+                <p class="label">Mod_01 // WIP</p>
+                <p class="value">DG_Trakr</p>
+                <p class="text-[10px] mt-2 opacity-70">Beautiful disc golf score tracking.</p>
             </div>
-            <a href="./dg-trakr/dg-trakr.html" class="btn-link">Initialize_Trakr</a>
+            <div class="flex justify-between items-end">
+                <p class="label">Status: WIP</p>
+                <a href="./dg-trakr/dg-trakr.html" class="te-key">→</a>
+            </div>
         </div>
 
-        <div class="blocky-card p-8 flex flex-col justify-between">
+        <div class="te-panel">
             <div>
-                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">Stable</span>
-                <h2 class="text-3xl font-black mt-4 mb-2">Flipper</h2>
-                <p class="text-sm opacity-70 mb-6">Flip a coin.</p>
+                <p class="label">Mod_02 // Stable</p>
+                <p class="value">Flipper</p>
+                <p class="text-[10px] mt-2 opacity-70">Flip a coin.</p>
             </div>
-            <a href="./flipper/flipper.html" class="btn-link">Initialize_Flip</a>
+            <div class="flex justify-between items-end">
+                <p class="label">Status: Stable</p>
+                <a href="./flipper/flipper.html" class="te-key">→</a>
+            </div>
         </div>
 
-        <div class="blocky-card p-8 flex flex-col justify-between">
+        <div class="te-panel">
             <div>
-                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">WIP</span>
-                <h2 class="text-3xl font-black mt-4 mb-2">Library_Database</h2>
-                <p class="text-sm opacity-70 mb-6">Personl Library Database</p>
+                <p class="label">Mod_03 // WIP</p>
+                <p class="value">Library_Database</p>
+                <p class="text-[10px] mt-2 opacity-70">Personal Library Database</p>
             </div>
-            <a href="./library/libary.html" class="btn-link">Initialize_Library</a>
-        </div>
-        <div class="blocky-card p-8 flex flex-col justify-between">
-            <div>
-                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">Stable</span>
-                <h2 class="text-3xl font-black mt-4 mb-2">Vault_Key</h2>
-                <p class="text-sm opacity-70 mb-6">Make passwords.</p>
+            <div class="flex justify-between items-end">
+                <p class="label">Status: WIP</p>
+                <a href="./library/libary.html" class="te-key">→</a>
             </div>
-            <a href="./password/password.html" class="btn-link">Initialize_Vault</a>
         </div>
-        <div class="blocky-card p-8 flex flex-col justify-between">
-            <div>
-                <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase">Stable</span>
-                <h2 class="text-3xl font-black mt-4 mb-2">Tic_Tac_Toe</h2>
-                <p class="text-sm opacity-70 mb-6">Is this not clear enough?</p>
-            </div>
-            <a href="./game/game.html" class="btn-link">Initialize_Game</a>
-        </div>
-        <div class="blocky-card p-8 flex flex-col justify-between border-dashed opacity-60">
-    <div>
-        <span class="text-[10px] font-mono bg-[var(--text)] text-[var(--bg)] px-2 py-1 uppercase tracking-widest">
-            Pending
-        </span>
-        
-        <h2 class="text-3xl font-black mt-4 mb-2 uppercase italic tracking-tighter">
-            System_Offline
-        </h2>
-        
-        <div class="space-y-2 mt-4">
-            <div class="h-2 w-full bg-[var(--text)] opacity-10"></div>
-            <div class="h-2 w-3/4 bg-[var(--text)] opacity-10"></div>
-            <div class="h-2 w-1/2 bg-[var(--text)] opacity-10"></div>
-        </div>
-    </div>
 
-    <div class="mt-8 py-3 border-2 border-[var(--border)] text-center font-mono text-xs uppercase tracking-[0.3em]">
-        [ COMING_SOON ]
-    </div>
-</div>
+        <div class="te-panel">
+            <div>
+                <p class="label">Mod_04 // Stable</p>
+                <p class="value">Vault_Key</p>
+                <p class="text-[10px] mt-2 opacity-70">Make passwords.</p>
+            </div>
+            <div class="flex justify-between items-end">
+                <p class="label">Status: Stable</p>
+                <a href="./password/password.html" class="te-key">→</a>
+            </div>
+        </div>
+
+        <div class="te-panel">
+            <div>
+                <p class="label">Mod_05 // Stable</p>
+                <p class="value">Tic_Tac_Toe</p>
+                <p class="text-[10px] mt-2 opacity-70">Is this not clear enough?</p>
+            </div>
+            <div class="flex justify-between items-end">
+                <p class="label">Status: Stable</p>
+                <a href="./game/game.html" class="te-key">→</a>
+            </div>
+        </div>
+
+        <div class="te-panel opacity-40">
+            <div>
+                <p class="label">Pending</p>
+                <p class="value italic">System_Offline</p>
+            </div>
+            <div class="space-y-1 mb-2">
+                <div class="h-[2px] w-full bg-current opacity-20"></div>
+                <div class="h-[2px] w-3/4 bg-current opacity-20"></div>
+            </div>
+        </div>
     </main>
 
-    <footer class="max-w-4xl mx-auto mt-20 font-mono text-[10px] uppercase opacity-40">
-  By <a href="https://github.com/TerabyteEXE" class="hover:underline hover:opacity-100 transition-opacity">Terabyte_EXE</a>
-</footer>
+    <footer class="flex gap-10">
+        <div>
+            <p class="label">Developer</p>
+            <p class="text-[10px] mt-1">
+                By <a href="https://github.com/TerabyteEXE" class="hover:underline">Terabyte_EXE</a>
+            </p>
+        </div>
+        <div>
+            <p class="label">Logic</p>
+            <p class="text-[10px] mt-1">Utility Software Archive // v1.8.2</p>
+        </div>
+    </footer>
 
     <script>
-        let currentTheme = localStorage.getItem('dg_theme') || 'light';
-
-        function applyTheme() {
-            document.documentElement.setAttribute('data-theme', currentTheme);
-        }
+        // Load preference
+        let currentTheme = localStorage.getItem('te_theme') || 'light';
+        if (currentTheme === 'dark') document.body.setAttribute('data-theme', 'dark');
 
         function toggleTheme() {
-            currentTheme = currentTheme === 'light' ? 'dark' : 'light';
-            localStorage.setItem('dg_theme', currentTheme);
-            applyTheme();
+            const body = document.body;
+            if (body.getAttribute('data-theme') === 'dark') {
+                body.removeAttribute('data-theme');
+                localStorage.setItem('te_theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('te_theme', 'dark');
+            }
         }
-
-        applyTheme();
     </script>
 </body>
 </html>
