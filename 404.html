@@ -2,16 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SYSTEM_ERROR | 404</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        body { background: #f2f2f0; color: black; font-family: monospace; }
-        .glitch { font-weight: 900; font-size: 5rem; border: 4px solid black; padding: 20px; box-shadow: 10px 10px 0px black; }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="flex flex-col items-center justify-center h-screen">
-    <h1 class="glitch">404: NOT_FOUND</h1>
-    <p class="mt-8 font-bold uppercase tracking-widest">The requested module is missing or corrupted.</p>
-    <a href="/Trakr/index.html" class="mt-4 underline font-bold">RETURN_TO_ROOT</a>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="te-grid w-full max-w-md">
+        <div class="te-panel border-2 border-[var(--te-orange)]">
+            <div>
+                <p class="label" style="color: var(--te-orange); opacity: 1;">Crit_Error // 404</p>
+                <p class="value text-4xl mt-2">NOT_FOUND</p>
+                <p class="text-[10px] mt-4 opacity-70">
+                    The requested module is missing, corrupted, or has been physically disconnected from the backplane.
+                </p>
+            </div>
+            
+            <div class="flex justify-between items-end mt-8">
+                <div>
+                    <p class="label">Action</p>
+                    <p class="value">Return_Root</p>
+                </div>
+                <a href="/Trakr/index.html" class="te-key orange">→</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="fixed bottom-10 left-10 opacity-20 pointer-events-none">
+        <p class="label">System_Log</p>
+        <p class="text-[10px]">ERR_ADDR_UNREACHABLE</p>
+        <p class="text-[10px]">BUS_TIMEOUT_P01</p>
+    </div>
+
+    <script>
+        // Maintain theme consistency even on error pages
+        const currentTheme = localStorage.getItem('te_theme');
+        if (currentTheme === 'dark') document.body.setAttribute('data-theme', 'dark');
+    </script>
 </body>
 </html>
