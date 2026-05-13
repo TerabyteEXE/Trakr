@@ -1,81 +1,129 @@
-/* CSS Variables - Light Theme */
+/* TERABYTE_EXE // SYSTEM STYLES 
+   Inspiration: Teenage Engineering / Industrial Design 
+*/
+
 :root {
-    --bg: #f2f2f0;
-    --card: #ffffff;
-    --text: #000000;
-    --accent: #2d5a27;
-    --border: #000000;
+    /* LIGHT MODE (DEFAULT) */
+    --te-bg: #e5e5e5;
+    --te-panel: #f0f0f0;
+    --te-text: #222222;
+    --te-orange: #ff4d00;
+    --te-border: #cccccc;
+    --te-key-bg: #ffffff;
+    --te-key-shadow: #bbbbbb;
+    --te-font: 'JetBrains Mono', monospace;
 }
 
-/* CSS Variables - Dark Theme */
-[data-theme='dark'] {
-    --bg: #111111;
-    --card: #1a1a1a;
-    --text: #ffffff;
-    --accent: #4ade80;
-    --border: #ffffff;
+[data-theme="dark"] {
+    /* DARK MODE (FIELD) */
+    --te-bg: #111111;
+    --te-panel: #1a1a1a;
+    --te-text: #e5e5e5;
+    --te-orange: #ff4d00;
+    --te-border: #333333;
+    --te-key-bg: #222222;
+    --te-key-shadow: #000000;
 }
 
-/* Body Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    background-color: var(--bg);
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    transition: none;
+    background: var(--te-bg);
+    color: var(--te-text);
+    font-family: var(--te-font);
+    padding: 20px;
+    transition: background 0.2s ease;
 }
 
-/* Blocky Card Component */
-.blocky-card {
-    background: var(--card);
-    border: 3px solid var(--border);
-    border-radius: 0px;
-    box-shadow: 6px 6px 0px var(--border);
+/* TYPOGRAPHY */
+.label { 
+    font-size: 10px; 
+    text-transform: uppercase; 
+    letter-spacing: 0.05em; 
+    opacity: 0.6; 
+    margin-bottom: 2px;
 }
 
-/* Solid Button Styling */
-.btn-solid {
-    background: var(--text);
-    color: var(--bg);
-    border: 2px solid var(--text);
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    transition: all 0.1s;
+.value { 
+    font-size: 14px; 
+    font-weight: 700; 
+    text-transform: uppercase; 
 }
 
-.btn-solid:active {
-    transform: translate(2px, 2px);
-    box-shadow: none;
+h1, h2, h3 { 
+    letter-spacing: -0.05em; 
+    text-transform: uppercase; 
 }
 
-/* Outline Button Styling */
-.btn-outline {
-    background: transparent;
-    color: var(--text);
-    border: 2px solid var(--text);
-    font-weight: 900;
-    text-transform: uppercase;
-}
-
-/* View Step Navigation */
-.view-step {
-    display: none;
-}
-
-.view-step.active {
-    display: block;
-}
-
-/* Input Fields */
-input {
-    background: transparent;
-    border-bottom: 2px solid var(--border);
-    outline: none;
-}
-
-/* Ledger Grid Layout */
-.ledger-grid {
+/* LAYOUT ENGINE */
+.te-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(45px, 1fr));
-    gap: 4px;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1px;
+    background: var(--te-border);
+    border: 1px solid var(--te-border);
+}
+
+.te-panel {
+    background: var(--te-panel);
+    padding: 20px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    transition: background 0.2s ease;
+}
+
+/* INTERACTIVES */
+.te-key {
+    width: 42px;
+    height: 42px;
+    background: var(--te-key-bg);
+    border-radius: 50%;
+    border: 1px solid var(--te-border);
+    box-shadow: 0 3px 0 var(--te-key-shadow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.1s;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+    font-weight: bold;
+}
+
+.te-key:hover {
+    filter: brightness(1.05);
+}
+
+.te-key:active {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 var(--te-key-shadow);
+}
+
+.te-key.orange {
+    background: var(--te-orange);
+    border-color: #cc3e00;
+    box-shadow: 0 3px 0 #cc3e00;
+    color: white;
+}
+
+/* HEADER/FOOTER */
+header {
+    border-bottom: 1px solid var(--te-border);
+    padding-bottom: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--te-border);
 }
